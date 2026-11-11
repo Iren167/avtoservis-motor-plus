@@ -1,0 +1,40 @@
+/* Изюминка "сканер диагностики": HUD-рамки, линия сканирования, стеклянные цифры */
+:root { --x-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; --x-glow: color-mix(in srgb, var(--c-accent) 60%, transparent); }
+
+/* линия сканирования поверх фона hero */
+.x-scan { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.x-scan::before { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; left: 0; background: linear-gradient(180deg, transparent, var(--c-accent) 20%, var(--c-accent) 80%, transparent); box-shadow: 0 0 24px 6px var(--x-glow); animation: x-sweep 7s cubic-bezier(.5, 0, .5, 1) infinite; }
+.x-scan::after { content: ""; position: absolute; top: 0; bottom: 0; width: 160px; left: -160px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--c-accent) 16%, transparent)); animation: x-sweep 7s cubic-bezier(.5, 0, .5, 1) infinite; }
+@keyframes x-sweep { 0% { transform: translateX(0); opacity: 0 } 8% { opacity: 1 } 92% { opacity: 1 } 100% { transform: translateX(100vw); opacity: 0 } }
+
+/* HUD-метка в углу hero */
+.x-tag { position: absolute; left: 0; bottom: 0; display: inline-flex; gap: 10px; align-items: center; font: 500 .72rem/1 var(--x-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-soft); }
+.x-tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-accent); box-shadow: 0 0 10px var(--c-accent); animation: x-blink 1.6s ease-in-out infinite; }
+@keyframes x-blink { 50% { opacity: .25 } }
+
+/* блок цифр: стекло + счётчики */
+.x-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: clamp(28px, 5vw, 56px) 0 0; }
+.x-stat { position: relative; padding: 22px 22px 20px; border-radius: 22px; background: color-mix(in srgb, #fff 6%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border: 1px solid color-mix(in srgb, #fff 14%, transparent); transition: transform .35s cubic-bezier(.2, .8, .2, 1), border-color .3s, box-shadow .3s; overflow: hidden; }
+.x-stat::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0, var(--x-glow), transparent 55%); opacity: .25; transition: opacity .3s; }
+.x-stat:hover { transform: translateY(-6px); border-color: var(--c-accent); box-shadow: 0 18px 40px rgba(0, 0, 0, .35), 0 0 24px -6px var(--x-glow); }
+.x-stat:hover::before { opacity: .6; }
+.x-stat b { position: relative; display: block; font: 700 clamp(2rem, 4vw, 3rem)/1 var(--f-display); color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.x-stat b sup { font-size: .45em; color: var(--c-accent); margin-left: 4px; vertical-align: top; position: relative; top: .35em; }
+.x-stat span { position: relative; display: block; margin-top: 10px; font: 500 .74rem/1.35 var(--x-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--c-ink-soft); }
+
+/* фото в рамках-прицелах */
+.s-photos figure { position: relative; overflow: visible; }
+.s-photos figure > img { border-radius: 18px; }
+.s-photos figure::before, .s-photos figure::after { content: ""; position: absolute; width: 26px; height: 26px; border: 2px solid var(--c-accent); opacity: .85; pointer-events: none; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .3s; z-index: 2; }
+.s-photos figure::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; border-top-left-radius: 8px; }
+.s-photos figure::after { right: 8px; bottom: 44px; border-left: 0; border-top: 0; border-bottom-right-radius: 8px; }
+.s-photos figure:hover::before { transform: translate(-4px, -4px); }
+.s-photos figure:hover::after { transform: translate(4px, 4px); }
+.s-photos figcaption { font-family: var(--x-mono); letter-spacing: .04em; }
+
+@media (max-width: 860px) { .x-stats { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 460px) { .x-stat { padding: 16px 14px; } .x-stat span { font-size: .66rem; } .x-tag { display: none; } }
+@media (prefers-reduced-motion: reduce) { .x-scan::before, .x-scan::after, .x-tag i { animation: none; } .x-scan { display: none; } }
+
+/* текст первого экрана по центру */
+@media (min-width: 961px) { .s-hero { align-items: start; } .s-hero__text { align-self: start; margin-top: max(0px, calc((100svh - var(--bar-h, 52px) - 230px) / 2 - 36px)); } }
