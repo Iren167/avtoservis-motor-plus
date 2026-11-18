@@ -38,3 +38,6 @@
 
 /* текст первого экрана по центру */
 @media (min-width: 961px) { .s-hero { align-items: start; } .s-hero__text { align-self: start; margin-top: max(0px, calc((100svh - var(--bar-h, 52px) - 230px) / 2 - 36px)); } }
+
+/* tiny phones: bottom dock must not overflow */
+@media (max-width:370px){ .s-dock .s-btn { font-size:.78rem; padding:0 .4em; min-width:0; } }
